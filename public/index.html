@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	#scrape{
+		align-items: center;
+	}
+
+	textarea.form-control{
+		border-color: #428bca;
+		resize: none;
+	}
+
+	html { 
+background: url(bg.jpeg) no-repeat center center fixed; 
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+</style>
+
+	<title>Scraper</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Header Begin -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+      <span style="font-size:1.5em" class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        
+      </a>
+    </div>
+  </div>
+</nav>
+<!-- Header End -->
+
+<!-- Container Begin -->
+<div class="container-fluid">
+
+	<h2 class="text-center">NPR News Scraper</h2><br>
+
+
+<!-- Row With Three Columns Begin -->
+<div id="hideAtStart">
+<div class="row">
+	<!-- Row 1 Begin -->
+	<div class="col-sm-3">
+		<textarea class="form-control form-control-primary" rows="15"></textarea>
+		<button type="button" class="btn btn-primary" id="hideAtStart" style="display:block; width: 100%"><span class="glyphicon glyphicon-pencil"></span>Attach Note</button><br>
+	</div>
+	<!-- Row 1 End -->
+
+	<!-- Row 2 Begin -->
+	<div class="col-sm-6">
+		<div class="panel panel-primary">
+		  <div class="panel-heading" id="newsTitle">
+		    <h3 class="panel-title"></h3>
+		  </div>
+		  <div class="panel-body" id="newsContent">
+		    <!-- Panel content -->
+		  </div>
+		</div>
+	</div>
+	<!-- Row 2 End -->
+
+	<!-- Row 3 Begin -->
+	<div class="col-sm-3">
+	<textarea class="form-control" rows="15"></textarea>
+		<button type="button" class="btn btn-primary" id="hideAtStart" style="display:block; width: 100%"><span class="glyphicon glyphicon-trash"></span> Delete Note</button><br>
+	</div>
+	<!-- Row 3 End -->
+
+
+
+</div>
+<!-- Row With Three Columns End -->
+</div>
+<button type="button" class="btn btn-primary center-block" id="scrape">Scrape News</button><br>
+
+<!-- Footer Begin -->
+<nav class="navbar-fixed-bottom navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <!-- <button type="button" class="btn btn-primary" id="scrape">Scrape News</button> -->
+    </div>
+  </div>
+</nav>
+<!-- Footer End -->
+
+
+
+
+
+
+</div>
+<!-- Container End -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
