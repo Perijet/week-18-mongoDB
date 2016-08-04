@@ -15,8 +15,8 @@ var databaseUrl = "scraper";
 var collections = ["scrapedData"];
 
 //Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
 //var db = mongojs(databaseUrl, collections);
+var db = mongojs(mongodb://heroku_6jtkwl62:hbcdvckrtl82oplaq0l584rcdn@ds023902.mlab.com:23902/heroku_6jtkwl62);
 db.on('error', function(err){
   console.log('Database Error:', err);
 });
