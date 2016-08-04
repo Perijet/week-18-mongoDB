@@ -49,6 +49,78 @@ app.get('/all', function(req, res) {
   
 });
 
+app.post('/noteBox/:id', function(req, res) {
+var note = req.body;
+//var id = req.params.id;
+db.scrapedData.update({
+    '_id': mongojs.ObjectId(req.params.id)
+  }, {
+    $set: {
+      'note':note.note
+    }
+  }, 
+  function(err, edited) {
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } 
+    else {
+      console.log(edited);
+      res.send(edited);
+    }
+  });
+
+	console.log(note);
+});
+
+
+app.post('/deleteBox/:id', function(req, res) {
+var note = req.body;
+//var id = req.params.id;
+db.scrapedData.update({
+    '_id': mongojs.ObjectId(req.params.id)
+  }, {
+    $set: {
+      'note':" "
+    }
+  }, 
+  function(err, edited) {
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } 
+    else {
+      console.log(edited);
+      res.send(edited);
+    }
+  });
+
+	console.log(note);
+});
+
+
+
+
+
+// app.get('/savedNote', function(req, res) {
+
+// var note = res.body;
+
+// db.scrapedData.find({'note': 'note'}, function (err, docs) {
+// 		//console.log(docs);
+//     res.json(docs);
+    
+//   });
+
+// //console.log(note);
+// 	// db.scrapedData.find({}, function (err, docs) {
+// 	// 	//console.log(docs);
+//     //res.json(note);
+    
+//  // });
+  
+// });
+
 
 // Route 2 When you visit this route, the server will
 // scrape data from the site of your choice, and save it to MongoDB.
@@ -59,11 +131,13 @@ request('http://www.npr.org/sections/news/', function (error, response, html) {
   var $ = cheerio.load(html);
   
 	$('div.item-info').each(function(i, element){
+
+
 	    var label = $(this).find('h2.title a').text();
 	    var link = $(this).find('h2.title a').attr('href');
 	    var teaser = $(this).find('p').text();
-	    console.log('label:', label);
-	    db.scrapedData.insert({"label":label, "teaser": teaser});
+	    console.log('link:', link);
+	    db.scrapedData.insert({"label":label, "teaser": teaser, "link": link});
     });
   
 });
