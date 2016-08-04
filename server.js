@@ -4,6 +4,7 @@ var express 	= require('express');
 var app 		= express();
 var bodyParser 	= require('body-parser');
 var logger 		= require('morgan');
+var mongoose 	= require('mongoose');
 
 var PORT 		= process.env.PORT || 3000;
 
@@ -13,12 +14,11 @@ var cheerio 	= require('cheerio');
 
 //Database configuration
 var mongojs 	= require('mongojs');
-//var databaseUrl = "scraper";
-var databaseUrl = 'mongodb://heroku_6jtkwl62:hbcdvckrtl82oplaq0l584rcdn@ds023902.mlab.com:23902/heroku_6jtkwl62';
+var databaseUrl = "scraper";
 var collections = ["scrapedData"];
 
 //Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
+var db = mongojs('mongodb://heroku_6jtkwl62:hbcdvckrtl82oplaq0l584rcdn@ds023902.mlab.com:23902/heroku_6jtkwl62');
 db.on('error', function(err){
   console.log('Database Error:', err);
 });
