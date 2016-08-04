@@ -94,48 +94,4 @@ $(document).ready(function(){
 
 	});
 
-// $('#addbook').on('click', function(){
-//   $.ajax({
-//     type: "POST",
-//     url: '/submit',
-//     dataType: 'json',
-//     data: {
-//       title: $('#title').val(),
-//       author: $('#author').val(),
-//       created: Date.now()
-//     }
-//   })
-//   .done(function(data){
-//     console.log(data);
-//     getUnread();
-//     $('#author').val("");
-//     $('#title').val("");
-//   }
-//   );
-//   return false;
-// });
-
-		// $('#newsTitle').append("<h4>" + data[counter].label + "</h4>");
-		// $('#newsContent').append("<p>" + data[counter].teaser + "</p");
-
-
-// function getNote(){
-//   $('#addNote').empty();
-//   $.getJSON('/savedNote', function(data) {
-//     // for (var i = 0; i<data.length; i++){
-//     //   $('#savedNote').prepend('<tr><td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td><td><button class="markunread" data-id="' +data[i]._id+ '">Mark Unread</button></td></tr>');
-//     // }
-//     $('#savedNote').append(data);
-//   });
-// }
-
-//getNote();
-	
-
-// 	$.getJSON("/savedNote", function (data){
-// 		$('#deleteNote').append("<p> Note: </p");
-// 		$('#savedNote').append("<p> Note: </p");
-
-// });
-
 });
