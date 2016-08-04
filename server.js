@@ -5,6 +5,8 @@ var app 		= express();
 var bodyParser 	= require('body-parser');
 var logger 		= require('morgan');
 
+var PORT 		= process.env.PORT || 3000;
+
 //Require request and cheerio. This makes the scraping possible
 var request 	= require('request');
 var cheerio 	= require('cheerio');
@@ -117,6 +119,6 @@ app.get('/scraper', function(req, res){
 });
 
 // listen on port 3000
-app.listen(3000, function(){
+app.listen(PORT, function(){
   console.log('App running on port 3000!');
 });
