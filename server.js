@@ -1,25 +1,23 @@
 
-// Initialize Express app
+//Initialize Express app
 var express 	= require('express');
 var app 		= express();
 var bodyParser 	= require('body-parser');
 var logger 		= require('morgan');
 
-
-// Require request and cheerio. This makes the scraping possible
+//Require request and cheerio. This makes the scraping possible
 var request 	= require('request');
 var cheerio 	= require('cheerio');
 
-
-
-// Database configuration
+//Database configuration
 var mongojs 	= require('mongojs');
 var databaseUrl = "scraper";
 var collections = ["scrapedData"];
 
-// Hook mongojs configuration to the db variable
+//Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
-db.on('error', function(err) {
+//var db = mongojs(databaseUrl, collections);
+db.on('error', function(err){
   console.log('Database Error:', err);
 });
 
@@ -29,106 +27,78 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static('public'));
-// Main route (simple Hello World Message)
-// app.get('/', function(req, res) {
-//   res.send(test.html);
-// });
 
-app.get('/', function(req, res) {
+//Route to serve up the index page
+app.get('/', function(req, res){
   res.send(index.html);
 });
 
-// Route 1 This route will retrieve all of the data 
+//Route to retrieve all of the data 
 app.get('/all', function(req, res) {
-
-	db.scrapedData.find({}, function (err, docs) {
-		//console.log(docs);
+	db.scrapedData.find({}, function (err, docs){
+    
     res.json(docs);
     
-  });
-  
+  	});  
 });
 
-app.post('/noteBox/:id', function(req, res) {
-var note = req.body;
-//var id = req.params.id;
-db.scrapedData.update({
-    '_id': mongojs.ObjectId(req.params.id)
-  }, {
-    $set: {
-      'note':note.note
-    }
-  }, 
-  function(err, edited) {
-    if (err) {
-      console.log(err);
-      res.send(err);
-    } 
-    else {
-      console.log(edited);
-      res.send(edited);
-    }
-  });
+//Route that receives data to update and add notes to the database
+app.post('/noteBox/:id', function(req, res){
+	var note = req.body;
 
-	console.log(note);
+	db.scrapedData.update({
+	    '_id': mongojs.ObjectId(req.params.id)}, 
+	    {
+	    	$set: {
+	      	'note':note.note
+	    	}
+	  	}, 
+	  function(err, edited){
+	    if (err){
+	      console.log(err);
+	      res.send(err);
+	    } 
+	    else{
+	      console.log(edited);
+	      res.send(edited);
+	    }
+
+	  });
+
+		console.log(note);
 });
 
+//Route to delete notes from database based on id received
+app.post('/deleteBox/:id', function(req, res){
+	var note = req.body;
 
-app.post('/deleteBox/:id', function(req, res) {
-var note = req.body;
-//var id = req.params.id;
-db.scrapedData.update({
-    '_id': mongojs.ObjectId(req.params.id)
-  }, {
-    $set: {
-      'note':" "
-    }
-  }, 
-  function(err, edited) {
-    if (err) {
-      console.log(err);
-      res.send(err);
-    } 
-    else {
-      console.log(edited);
-      res.send(edited);
-    }
-  });
+	db.scrapedData.update({
+		'_id': mongojs.ObjectId(req.params.id)}, 
+	    {
+		    $set: {
+		      'note':" "
+		    }
+	  	},
+	  	function(err, edited){
+		    if (err) {
+		      console.log(err);
+		      res.send(err);
+		    } 
+		    else{
+		      console.log(edited);
+		      res.send(edited);
+		    }
+	  	});
 
-	console.log(note);
+		console.log(note);
 });
 
+//Route scrapes data from the NPR news site, and save it to MongoDB.
+app.get('/scraper', function(req, res){
 
+	request('http://www.npr.org/sections/news/', function (error, response, html){
 
-
-
-// app.get('/savedNote', function(req, res) {
-
-// var note = res.body;
-
-// db.scrapedData.find({'note': 'note'}, function (err, docs) {
-// 		//console.log(docs);
-//     res.json(docs);
-    
-//   });
-
-// //console.log(note);
-// 	// db.scrapedData.find({}, function (err, docs) {
-// 	// 	//console.log(docs);
-//     //res.json(note);
-    
-//  // });
-  
-// });
-
-
-// Route 2 When you visit this route, the server will
-// scrape data from the site of your choice, and save it to MongoDB.
-app.get('/scraper', function(req, res) {
-
-request('http://www.npr.org/sections/news/', function (error, response, html) {
-
-  var $ = cheerio.load(html);
+	var $ = cheerio.load(html);
   
 	$('div.item-info').each(function(i, element){
 
@@ -137,17 +107,17 @@ request('http://www.npr.org/sections/news/', function (error, response, html) {
 	    var link = $(this).find('h2.title a').attr('href');
 	    var teaser = $(this).find('p').text();
 	    console.log('link:', link);
-	    db.scrapedData.insert({"label":label, "teaser": teaser, "link": link});
+	    db.scrapedData.save({'_id': mongojs.ObjectId(req.params.id),
+  "label":label, "teaser": teaser, "link": link});
     });
   
+	});
+
+  		res.redirect('/');
+
 });
-
-  res.send("Website Scraped");
-
-});
-
 
 // listen on port 3000
-app.listen(3000, function() {
+app.listen(3000, function(){
   console.log('App running on port 3000!');
 });

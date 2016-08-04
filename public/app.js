@@ -7,12 +7,9 @@ $(document).ready(function(){
 
 	$.getJSON("/all", function (data){
 			var counter = -1;
-			// $('#newsTitle').append("<h4>" + data[counter].label + "</h4>");
 			$('#newsContent').html('<h2>click here to begin</h2>');	
 			$('#article').append("<p>|| Article: ||</p");
-			// $('#savedNote').text(data[counter].note);	
-			// //$('#deleteNote').append("<p> Note: </p");	
-			// $('#article').append("<p>" + "Article: " + (counter + 1) + "</p");		
+			$('#newsLink').html("<br>");		
 	
 		$(document).on('click keyup', '#newsContent' ,function (){
 			$('#newsContent').blur();
@@ -27,70 +24,55 @@ $(document).ready(function(){
 			}
 			console.log(counter);
 			$('#newsTitle').append("<h4>" + data[counter].label + "</h4>");
-			$('#newsContent').html("<p>" + data[counter].teaser + "</p><br>" + "<a>" + data[counter].link) + "</a>";
-			//$('#newsContent').text(data[counter].link);
+			$('#newsContent').html("<p>" + data[counter].teaser);
+			$('#newsLink').html("<a target='_blank' href =" + data[counter].link + ">Article Link</a>");
 			console.log(data[counter].link);
 			$('#savedNote').text(data[counter].note);
 			$('#article').append("<p>||" + "Article: " + (counter + 1) + "||</p");
 			$('textarea').blur();
-	});	
+		});			
 		
-		
-	$('#attachNote').on('click', function(){
+		$('#attachNote').on('click', function(){
+		    var thisId = data[counter]._id;
+		    console.log(thisId);
+		    var note = $('#addNote').val();
+		    $.ajax({
+		      type: "POST",
+		      url: '/noteBox/' + thisId,
+		      data:{
+		      	note: note,
+		      	created: Date.now()
+		      }
+		    })
+		    .done(function(result){
+		    	console.log(result);
+		    	$('#addNote').val(" ");
+		    	$('#savedNote').text(note);	
+		    });
 
-	    var thisId = data[counter]._id;
-	    console.log(thisId);
-	    var note = $('#addNote').val();
-	    $.ajax({
-	      type: "POST",
-	      url: '/noteBox/' + thisId,
-	      data:{
-	      	note: note,
-	      	created: Date.now()
-	      }
-	    })
-	    .done(function(result){
-	    	console.log(result);
-	    	//getNote();
-	    	$('#addNote').val(" ");
-	    	$('#savedNote').text(note);
-	    	
-	    	
-	    });
-	    return false;
+		    return false;
+		}); 
 
-	   }); 
+		$('#deleteNote').on('click', function(){
+		    var thisId = data[counter]._id;
+		    console.log(thisId);
+		    var note = $('#savedNote').val();
+		    $.ajax({
+		      type: "POST",
+		      url: '/deleteBox/' + thisId,
+		      data:{
+		      	note: note,
+		      	created: Date.now()
+		      }
+		    })
+		    .done(function(result){
+		    	console.log(result);
+		    	$('#savedNote').empty();
+		    	
+		    });
 
-
-
-
-	$('#deleteNote').on('click', function(){
-
-	    var thisId = data[counter]._id;
-	    console.log(thisId);
-	    var note = $('#savedNote').val();
-	    $.ajax({
-	      type: "POST",
-	      url: '/deleteBox/' + thisId,
-	      data:{
-	      	note: note,
-	      	created: Date.now()
-	      }
-	    })
-	    .done(function(result){
-	    	console.log(result);
-	    	//getNote();
-	    	$('#savedNote').empty();
-	    	//$('#savedNote').val(note);
-	    	
-	    });
-	    return false;
-
-	   }); 
-
-
-
-
+		    return false;
+		}); 
 
 	});
 
