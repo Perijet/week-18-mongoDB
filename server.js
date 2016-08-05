@@ -15,12 +15,17 @@ var cheerio 	= require('cheerio');
 //Database configuration
 var mongojs 	= require('mongojs');
 //var databaseUrl = "scraper";
-var databaseUrl = 'mongodb://heroku_6jtkwl62:hbcdvckrtl82oplaq0l584rcdn@ds023902.mlab.com:23902/heroku_6jtkwl62';
+//var databaseUrl = 'mongodb://heroku_6jtkwl62:hbcdvckrtl82oplaq0l584rcdn@ds023902.mlab.com:23902/heroku_6jtkwl62';
 var collections = ["scrapedData"];
 
 //Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on('error', function(err){
+// var db = mongojs(databaseUrl, collections);
+// db.on('error', function(err){
+//   console.log('Database Error:', err);
+// });
+
+var db = mongojs(process.env.MONGODB_URI);
+db.on('error', function(err) {
   console.log('Database Error:', err);
 });
 
